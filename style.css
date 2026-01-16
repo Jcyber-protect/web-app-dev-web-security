@@ -76,10 +76,3 @@ button:hover {
 a {
   text-decoration: none;
 }
-
-
-.container {
-  display: flex;
-  column-gap: 20px;
- 
-}
