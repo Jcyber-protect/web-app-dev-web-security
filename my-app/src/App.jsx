@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './index.css';
 
 // Option 1: If image is in public folder
-const profilePic = '/joel.jpeg';
+const profilePic = 'src/assets/joell.jpeg';
 
 // Option 2: If image is in src/assets
 // import profilePic from './assets/joel.jpeg';
@@ -230,7 +230,7 @@ const Header = () => {
     <header className="portfolio-header">
       <div className="header-left">
         <h1>Joel's Portfolio</h1>
-        <p>Full Stack Developer & Cybersecurity Professional</p>
+        <p>FullStack AI Web Developer | Email Security Specialist | SOC Analyst | Cybersecurity Professional</p>
       </div>
       <div className="header-right">
         <div className="contact-buttons-header">
