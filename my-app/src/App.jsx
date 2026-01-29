@@ -1,6 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
-import profilePic from './assets/joel.jpeg';
+
+// Option 1: If image is in public folder
+const profilePic = '/joel.jpeg';
+
+// Option 2: If image is in src/assets
+// import profilePic from './assets/joel.jpeg';
 
 // ==========================================
 // CONSTANTS & DATA
@@ -20,17 +25,6 @@ const CONTACT_LINKS = [
     )
   },
   {
-    id: 'email',
-    label: 'Email Me',
-    url: 'mailto:joel.ibazebo@outlook.com',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-        <polyline points="22,6 12,13 2,6" />
-      </svg>
-    )
-  },
-  {
     id: 'github',
     label: 'GitHub',
     url: 'https://github.com/Jcyber-protect',
@@ -39,14 +33,33 @@ const CONTACT_LINKS = [
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
       </svg>
     )
+  },
+  {
+    id: 'email',
+    label: 'Email',
+    url: 'mailto:joel.ibazebo@outlook.com',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+        <polyline points="22,6 12,13 2,6" />
+      </svg>
+    )
   }
+];
+
+const CORE_COMPETENCIES = [
+  'Web Development',
+  'Application Security',
+  'API Development',
+  'Threat Analysis',
+  'Cloud Solutions',
+  'Secure Coding'
 ];
 
 const WEB_SKILLS = [
   'HTML5 & CSS3',
   'JavaScript (ES6+)',
   'React & Next.js',
-  'Node.js & Express',
   'RESTful APIs',
   'Responsive Design'
 ];
@@ -57,7 +70,9 @@ const WEB_TOOLS = [
   'Webpack & Babel',
   'Docker',
   'MongoDB & PostgreSQL',
-  'AI Integration (OpenAI API)'
+  'AI Integration (OpenAI API)',
+  'Supabase',
+  'Firebase',
 ];
 
 const SECURITY_SKILLS = [
@@ -66,16 +81,51 @@ const SECURITY_SKILLS = [
   'SIEM & Incident Response',
   'Vulnerability Management',
   'Phishing Analysis',
-  'Regulatory Compliance'
+  'Regulatory Compliance',
+  'Email Security',
+  'Microsoft 365 Administrator and Exchange Admin',
+  'Security Awareness Training',
+  'Incident Response Plan and Playbook',
+  'Security Best Practices',
+  'Phishing Detection and IOCs',
+  'Business Email Compromise (BEC) Detection and Prevention',
 ];
 
 const SECURITY_TOOLS = [
   'Microsoft 365 Security',
   'Exchange Admin Center',
-  'Wireshark',
-  'Nmap',
-  'Metasploit',
-  'Splunk'
+  'AZure Security Center',
+  'Entra ID',
+  'MS Sentinel',
+  'Splunk',
+  
+];
+
+const EDUCATION = [
+  {
+    id: 1,
+    degree: 'Bachelor of Science in Information Technology - Network and Security Engineering',
+    institution: 'Eduvos University ',
+    date: '2024 - 2027',
+    description: 'Focused on Network and Security Engineering, Cybersecurity Architecture and Design, Information Security and Assurance, and Cybersecurity Policy and Compliance.'
+  },
+  
+];
+
+const CERTIFICATIONS = [
+  {
+    id: 1,
+    name: 'EC-Council Certified SOC Analyst',
+    issuer: 'EC-Council',
+    date: '2025',
+  },
+  
+  {
+    id: 2,
+    name: 'YashNic Academy - Ai web developer',
+    issuer: 'YashNic Academy',
+    date: '2026',
+  },
 ];
 
 const PROJECTS = [
@@ -121,11 +171,7 @@ const PROJECTS = [
 // CUSTOM HOOKS
 // ==========================================
 
-/**
- * Custom hook for scroll reveal animations
- * @param {number} threshold - Scroll threshold for reveal
- */
-const useScrollReveal = (threshold = 100) => {
+const useScrollReveal = () => {
   useEffect(() => {
     const reveals = document.querySelectorAll('.reveal');
     
@@ -134,7 +180,7 @@ const useScrollReveal = (threshold = 100) => {
         const windowHeight = window.innerHeight;
         const elementTop = element.getBoundingClientRect().top;
         
-        if (elementTop < windowHeight - threshold) {
+        if (elementTop < windowHeight - 100) {
           setTimeout(() => {
             element.classList.add('active');
           }, index * 100);
@@ -142,30 +188,10 @@ const useScrollReveal = (threshold = 100) => {
       });
     };
 
-    // Initial check
     handleScroll();
-
-    // Add scroll listener
     window.addEventListener('scroll', handleScroll, { passive: true });
     
-    // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [threshold]);
-};
-
-/**
- * Custom hook for page fade-in animation
- */
-const usePageFadeIn = () => {
-  useEffect(() => {
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.3s ease';
-    
-    const timer = setTimeout(() => {
-      document.body.style.opacity = '1';
-    }, 10);
-
-    return () => clearTimeout(timer);
   }, []);
 };
 
@@ -175,13 +201,12 @@ const usePageFadeIn = () => {
 
 function App() {
   useScrollReveal();
-  usePageFadeIn();
 
   return (
     <div className="portfolio-container">
       <Header />
       <main className="portfolio-content">
-        <Profile />
+        <ProfileSidebar />
         <MainContent />
       </main>
       <Projects />
@@ -195,174 +220,99 @@ export default App;
 // HEADER COMPONENT
 // ==========================================
 
-const Header = React.memo(() => {
+const Header = () => {
   const handleLogout = () => {
-    // Clear session
     sessionStorage.clear();
-    
-    // Add fade-out animation
-    document.body.style.opacity = '0';
-    document.body.style.transition = 'opacity 0.3s ease';
-    
-    // Redirect after animation
-    setTimeout(() => {
-      window.location.href = '/login';
-    }, 300);
+    window.location.href = '/login';
   };
 
   return (
     <header className="portfolio-header">
-      <div>
-        <h1>Joel's Portfolio Dashboard</h1>
-        <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: 'var(--font-size-sm)' }}>
-          Web Developer & Cybersecurity Professional
-        </p>
+      <div className="header-left">
+        <h1>Joel's Portfolio</h1>
+        <p>Full Stack Developer & Cybersecurity Professional</p>
       </div>
-      <button 
-        className="logout-button" 
-        onClick={handleLogout}
-        aria-label="Logout from portfolio dashboard"
-      >
-        <span>Logout</span>
-      </button>
+      <div className="header-right">
+        <div className="contact-buttons-header">
+          {CONTACT_LINKS.map(({ id, label, url, icon }) => (
+            <a
+              key={id}
+              href={url}
+              target={id !== 'email' ? '_blank' : undefined}
+              rel={id !== 'email' ? 'noopener noreferrer' : undefined}
+            >
+              <button className="contact-btn" aria-label={`Connect on ${label}`}>
+                {icon}
+                <span>{label}</span>
+              </button>
+            </a>
+          ))}
+        </div>
+        <button 
+          className="logout-button" 
+          onClick={handleLogout}
+          aria-label="Logout from portfolio"
+        >
+          Logout
+        </button>
+      </div>
     </header>
   );
-});
-
-Header.displayName = 'Header';
+};
 
 // ==========================================
-// PROFILE COMPONENT
+// PROFILE SIDEBAR
 // ==========================================
 
-const Profile = React.memo(() => {
+const ProfileSidebar = () => {
   return (
-    <aside className="profile-section reveal" role="complementary">
-      <div style={{ textAlign: 'center' }}>
+    <aside className="profile-section reveal">
+      <div className="profile-header">
         <img 
           src={profilePic} 
           alt="Joel Ibazebo - Full Stack Developer" 
           loading="lazy"
-          width="140"
-          height="140"
         />
         <h2>Joel Ibazebo</h2>
-        <p style={{ 
-          color: 'var(--text-secondary)', 
-          fontSize: 'var(--font-size-sm)',
-          marginBottom: 'var(--spacing-lg)'
-        }}>
-          Full Stack Developer & Security Specialist
-        </p>
+        <span className="role">Developer & Security Specialist</span>
       </div>
       
-      <CoreCompetencies />
-      <ContactButtons />
+      <div className="competencies-section">
+        <h3>Core Competencies</h3>
+        <ul>
+          {CORE_COMPETENCIES.map((skill, index) => (
+            <li key={index}>{skill}</li>
+          ))}
+        </ul>
+      </div>
     </aside>
   );
-});
-
-Profile.displayName = 'Profile';
+};
 
 // ==========================================
-// CORE COMPETENCIES COMPONENT
+// MAIN CONTENT
 // ==========================================
 
-const CoreCompetencies = React.memo(() => {
-  const competencies = [
-    'Web Development',
-    'Application Security',
-    'API Development',
-    'Threat Analysis',
-    'Cloud Solutions'
-  ];
-
-  return (
-    <div className="skills-section">
-      <h3>Core Competencies</h3>
-      <ul>
-        {competencies.map((skill, index) => (
-          <li key={index}>{skill}</li>
-        ))}
-      </ul>
-    </div>
-  );
-});
-
-CoreCompetencies.displayName = 'CoreCompetencies';
-
-// ==========================================
-// CONTACT BUTTONS COMPONENT
-// ==========================================
-
-const ContactButtons = React.memo(() => {
-  return (
-    <nav className="contact-buttons" aria-label="Contact and social media links">
-      {CONTACT_LINKS.map(({ id, label, url, icon }) => (
-        <a
-          key={id}
-          href={url}
-          target={id !== 'email' ? '_blank' : undefined}
-          rel={id !== 'email' ? 'noopener noreferrer' : undefined}
-          style={{ textDecoration: 'none' }}
-        >
-          <button aria-label={`Connect on ${label}`}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-              {icon}
-              {label}
-            </span>
-          </button>
-        </a>
-      ))}
-    </nav>
-  );
-});
-
-ContactButtons.displayName = 'ContactButtons';
-
-// ==========================================
-// MAIN CONTENT COMPONENT
-// ==========================================
-
-const MainContent = React.memo(() => {
+const MainContent = () => {
   return (
     <div className="main-content">
       <AboutSection />
-      <SkillsSection 
-        title="Web/App Development"
-        skills={WEB_SKILLS}
-        tools={WEB_TOOLS}
-      />
-      <SkillsSection 
-        title="Cybersecurity Expertise"
-        skills={SECURITY_SKILLS}
-        tools={SECURITY_TOOLS}
-      />
+      <SkillsSection />
+      <EducationSection />
+      <CertificationsSection />
     </div>
   );
-});
-
-MainContent.displayName = 'MainContent';
+};
 
 // ==========================================
-// ABOUT SECTION COMPONENT
+// ABOUT SECTION
 // ==========================================
 
-const AboutSection = React.memo(() => {
+const AboutSection = () => {
   return (
-    <section className="reveal" style={{ marginBottom: 'var(--spacing-xl)' }}>
-      <h2 style={{ 
-        fontFamily: 'Syne, sans-serif',
-        fontSize: 'var(--font-size-2xl)',
-        marginBottom: 'var(--spacing-md)',
-        color: 'var(--text-primary)'
-      }}>
-        About Me
-      </h2>
-      <p style={{ 
-        color: 'var(--text-secondary)',
-        lineHeight: '1.8'
-      }}>
+    <section className="content-section reveal">
+      <h2>About Me</h2>
+      <p>
         I'm an aspiring web and application developer with a growing interest in building 
         startup-ready products, supported by a foundation in cybersecurity. I'm currently 
         learning how to design and develop modern web and app applications, focusing on 
@@ -371,61 +321,109 @@ const AboutSection = React.memo(() => {
       </p>
     </section>
   );
-});
-
-AboutSection.displayName = 'AboutSection';
+};
 
 // ==========================================
-// SKILLS SECTION COMPONENT
+// SKILLS SECTION
 // ==========================================
 
-const SkillsSection = React.memo(({ title, skills, tools }) => {
+const SkillsSection = () => {
   return (
-    <section className="reveal" style={{ marginBottom: 'var(--spacing-xl)' }}>
-      <h2 style={{
-        fontFamily: 'Syne, sans-serif',
-        fontSize: 'var(--font-size-2xl)',
-        marginBottom: 'var(--spacing-md)',
-        color: 'var(--text-primary)',
-        paddingBottom: 'var(--spacing-sm)',
-        borderBottom: '2px solid var(--border-color)'
-      }}>
-        {title}
-      </h2>
-      <div className="skills-table">
-        <SkillsCategory title="Technical Skills" items={skills} />
-        <SkillsCategory title="Tools & Technologies" items={tools} />
+    <>
+      <section className="content-section reveal">
+        <h2>Web Development</h2>
+        <div className="skills-table">
+          <div className="skills-category">
+            <h4>Technical Skills</h4>
+            <ul>
+              {WEB_SKILLS.map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="skills-category">
+            <h4>Tools & Technologies</h4>
+            <ul>
+              {WEB_TOOLS.map((tool, index) => (
+                <li key={index}>{tool}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section reveal">
+        <h2>Cybersecurity</h2>
+        <div className="skills-table">
+          <div className="skills-category">
+            <h4>Security Skills</h4>
+            <ul>
+              {SECURITY_SKILLS.map((skill, index) => (
+                <li key={index}>{skill}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="skills-category">
+            <h4>Security Tools</h4>
+            <ul>
+              {SECURITY_TOOLS.map((tool, index) => (
+                <li key={index}>{tool}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+// ==========================================
+// EDUCATION SECTION
+// ==========================================
+
+const EducationSection = () => {
+  return (
+    <section className="content-section reveal">
+      <h2>Education</h2>
+      {EDUCATION.map(({ id, degree, institution, date, description }) => (
+        <div key={id} className="education-item">
+          <h3>{degree}</h3>
+          <div className="institution">{institution}</div>
+          <div className="date">{date}</div>
+          <p>{description}</p>
+        </div>
+      ))}
+    </section>
+  );
+};
+
+// ==========================================
+// CERTIFICATIONS SECTION
+// ==========================================
+
+const CertificationsSection = () => {
+  return (
+    <section className="content-section reveal">
+      <h2>Certifications</h2>
+      <div className="certifications-grid">
+        {CERTIFICATIONS.map(({ id, name, issuer, date, icon }) => (
+          <div key={id} className="certification-card">
+            <div className="certification-icon">{icon}</div>
+            <h4>{name}</h4>
+            <div className="issuer">{issuer}</div>
+            <div className="date">{date}</div>
+          </div>
+        ))}
       </div>
     </section>
   );
-});
-
-SkillsSection.displayName = 'SkillsSection';
+};
 
 // ==========================================
-// SKILLS CATEGORY COMPONENT
+// PROJECTS SECTION
 // ==========================================
 
-const SkillsCategory = React.memo(({ title, items }) => {
-  return (
-    <div className="skills-category">
-      <h4>{title}</h4>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-    </div>
-  );
-});
-
-SkillsCategory.displayName = 'SkillsCategory';
-
-// ==========================================
-// PROJECTS SECTION COMPONENT
-// ==========================================
-
-const Projects = React.memo(() => {
+const Projects = () => {
   return (
     <section className="projects-section reveal">
       <h2>Featured Projects</h2>
@@ -436,19 +434,12 @@ const Projects = React.memo(() => {
       </div>
     </section>
   );
-});
+};
 
-Projects.displayName = 'Projects';
-
-// ==========================================
-// PROJECT CARD COMPONENT
-// ==========================================
-
-const ProjectCard = React.memo(({ title, description, tags }) => {
+const ProjectCard = ({ title, description, tags }) => {
   const handleClick = (e) => {
     e.preventDefault();
     console.log(`Project clicked: ${title}`);
-    // TODO: Implement project detail view or navigation
   };
 
   return (
@@ -456,25 +447,9 @@ const ProjectCard = React.memo(({ title, description, tags }) => {
       <h3>{title}</h3>
       <p>{description}</p>
       {tags && tags.length > 0 && (
-        <div style={{ 
-          display: 'flex', 
-          gap: 'var(--spacing-xs)', 
-          flexWrap: 'wrap',
-          marginBottom: 'var(--spacing-sm)'
-        }}>
+        <div className="project-tags">
           {tags.map((tag, index) => (
-            <span 
-              key={index}
-              style={{
-                fontSize: 'var(--font-size-xs)',
-                padding: '0.25rem 0.75rem',
-                background: 'rgba(0, 240, 255, 0.1)',
-                border: '1px solid rgba(0, 240, 255, 0.3)',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--primary-color)',
-                fontWeight: 600
-              }}
-            >
+            <span key={index} className="project-tag">
               {tag}
             </span>
           ))}
@@ -485,10 +460,8 @@ const ProjectCard = React.memo(({ title, description, tags }) => {
         onClick={handleClick}
         aria-label={`View details for ${title}`}
       >
-        View Project
+        View Project →
       </a>
     </article>
   );
-});
-
-ProjectCard.displayName = 'ProjectCard';
+};
