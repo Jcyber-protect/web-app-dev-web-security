@@ -53,15 +53,20 @@ const CORE_COMPETENCIES = [
   'API Development',
   'Threat Analysis',
   'Cloud Solutions',
-  'Secure Coding'
+  'Secure Coding',
+  'Email Security',
+  'Incident Response',
+  'Network Security',
+
 ];
 
 const WEB_SKILLS = [
   'HTML5 & CSS3',
-  'JavaScript (ES6+)',
+  'JavaScript',
   'React & Next.js',
   'RESTful APIs',
-  'Responsive Design'
+  'Responsive Design',
+  'NesJS',
 ];
 
 const WEB_TOOLS = [
@@ -73,6 +78,10 @@ const WEB_TOOLS = [
   'AI Integration (OpenAI API)',
   'Supabase',
   'Firebase',
+  'Vercel & Netlify',
+  'Figma',
+  'Tailwind CSS',
+  'Prisma schema',
 ];
 
 const SECURITY_SKILLS = [
@@ -133,37 +142,49 @@ const PROJECTS = [
     id: 1,
     title: 'E-Commerce Platform',
     description: 'A full-stack e-commerce site with features like product management, user authentication, and a secure payment gateway integration.',
-    tags: ['React', 'Node.js', 'MongoDB']
+    tags: ['React', 'Node.js', 'MongoDB'],
+    url: null, // Add URL when deployed
+    status: 'In Development'
   },
   {
     id: 2,
     title: 'Logistics Tracking Dashboard',
     description: 'A real-time logistics and fleet management dashboard for tracking shipments and vehicle locations with live updates.',
-    tags: ['React', 'WebSocket', 'Maps API']
+    tags: ['React', 'WebSocket', 'Maps API'],
+    url: null,
+    status: 'In Development'
   },
   {
     id: 3,
     title: 'Mining Operations Monitor',
     description: 'A web application for monitoring and managing heavy machinery and roadwork operations in real-time with IoT integration.',
-    tags: ['Next.js', 'IoT', 'Real-time']
+    tags: ['Next.js', 'IoT', 'Real-time'],
+    url: null,
+    status: 'In Development'
   },
   {
     id: 4,
     title: 'Qoventis: Email Intelligence SaaS',
     description: 'Co-founded and built a SaaS platform for advanced email threat detection and prevention using AI-powered analysis.',
-    tags: ['AI/ML', 'Security', 'SaaS']
+    tags: ['AI/ML', 'Security', 'SaaS'],
+    url: 'https://qoventis.com', // 👈 Add your Qoventis URL here
+    status: 'Live'
   },
   {
     id: 5,
     title: 'Automated Phishing Reporter',
     description: 'A tool that allows users to report suspicious emails and automates the process of analysis and remediation workflows.',
-    tags: ['Security', 'Automation', 'Python']
+    tags: ['Security', 'Automation', 'Python'],
+    url: null,
+    status: 'Completed'
   },
   {
     id: 6,
     title: 'Network Anomaly Detector',
     description: 'A custom tool that monitors network traffic and uses machine learning to detect and alert on unusual patterns and threats.',
-    tags: ['ML', 'Security', 'Analytics']
+    tags: ['ML', 'Security', 'Analytics'],
+    url: null,
+    status: 'Completed'
   }
 ];
 
@@ -230,7 +251,7 @@ const Header = () => {
     <header className="portfolio-header">
       <div className="header-left">
         <h1>Joel's Portfolio</h1>
-        <p>FullStack AI Web Developer | Email Security Specialist | SOC Analyst | Cybersecurity Professional</p>
+        <p>Full Stack Developer & Cybersecurity Professional</p>
       </div>
       <div className="header-right">
         <div className="contact-buttons-header">
@@ -313,11 +334,13 @@ const AboutSection = () => {
     <section className="content-section reveal">
       <h2>About Me</h2>
       <p>
-        I'm an aspiring web and application developer with a growing interest in building 
-        startup-ready products, supported by a foundation in cybersecurity. I'm currently 
-        learning how to design and develop modern web and app applications, focusing on 
-        writing clean and understandable code. My cybersecurity background influences how 
-        I learn and practice development, especially around security and data handling.
+        I’m a builder at the intersection of AI, web technology, and cybersecurity, focused on creating products that solve real security and communication problems. My work combines modern application development with a security first mindset, allowing me to design systems that are not only functional, but resilient and trustworthy.
+
+As the founder of Qoventis Email Intelligence, I focus on building AI-powered web applications, especially in the area of email intelligence and security. I enjoy creating tools that solve real-world problems, from detecting suspicious activity to improving how organizations understand their communication data. My focus is on helping organizations detect threats, reduce risk, and gain visibility into their communication environments.
+
+I’m driven by the belief that AI and security should work together  not as afterthoughts, but as core design principles. My long term goal is to build scalable, security focused platforms that businesses can depend on in an increasingly digital world.
+
+I’m constantly learning and refining my skills, with the goal of building secure, scalable applications that make technology safer and more useful for people and businesses.
       </p>
     </section>
   );
@@ -436,10 +459,13 @@ const Projects = () => {
   );
 };
 
-const ProjectCard = ({ title, description, tags }) => {
+const ProjectCard = ({ title, description, tags, url, status }) => {
   const handleClick = (e) => {
-    e.preventDefault();
-    console.log(`Project clicked: ${title}`);
+    // If no URL, prevent default and show coming soon
+    if (!url) {
+      e.preventDefault();
+      alert('Project details coming soon!');
+    }
   };
 
   return (
@@ -453,14 +479,45 @@ const ProjectCard = ({ title, description, tags }) => {
               {tag}
             </span>
           ))}
+          {status && (
+            <span 
+              className="project-tag" 
+              style={{
+                background: status === 'Live' ? '#dcfce7' : status === 'Completed' ? '#e0e7ff' : '#fef3c7',
+                color: status === 'Live' ? '#166534' : status === 'Completed' ? '#1e40af' : '#92400e',
+                borderColor: status === 'Live' ? '#22c55e' : status === 'Completed' ? '#3b82f6' : '#f59e0b'
+              }}
+            >
+              {status}
+            </span>
+          )}
         </div>
       )}
       <a 
-        href="#" 
+        href={url || '#'} 
         onClick={handleClick}
-        aria-label={`View details for ${title}`}
+        target={url ? '_blank' : undefined}
+        rel={url ? 'noopener noreferrer' : undefined}
+        aria-label={url ? `Visit ${title} website` : `View details for ${title}`}
+        style={{ 
+          cursor: 'pointer',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.25rem'
+        }}
       >
-        View Project →
+        {url ? (
+          <>
+            Visit Website
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </>
+        ) : (
+          'View Details →'
+        )}
       </a>
     </article>
   );
